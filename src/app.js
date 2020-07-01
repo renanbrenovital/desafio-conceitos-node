@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-
 const { uuid } = require("uuidv4");
 
 const app = express();
@@ -32,12 +31,16 @@ app.post("/repositories", (request, response) => {
 
 app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
-  const { url, title, techs } = request.body;
+  const { url, title, techs, likes } = request.body;
   
   const index = repositories.findIndex(repository => repository.id === id);
   
   if(index < 0) {
     return response.status(400).json({error: 'Repository not found'});
+  }
+
+  if(likes) {
+    return response.json(repositories[index]);
   }
 
   const repository = { id, url, title, techs };
